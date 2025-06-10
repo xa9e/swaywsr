@@ -34,7 +34,7 @@ exec_always pgrep -x swaywsr > /dev/null && pkill -x swaywsr; $PATH_TO_RELEASE_B
 You must provide a config file that is passed using the `--config path_to_file.toml` option. The `toml` file has four fields:
 - `icons` to assign icons to classes
 - `aliases` to assign alternative names to be displayed 
-- `general` to assign the separator, the default icon and the protected workspace ending char.
+- `general` to assign the separator, the default icon, the duplicate multiplier and the protected workspace ending char.
 - `options` to assign additional flags available in the cli interface. Replace hyphens from cli with underscores, e.g. `--no-names` would be `no-names` in the config file.
 
 You can configure icons for the respective classes, a very basic preset for font-awesome is configured, to enable it use the option `--icons awesome` (requires font-awesome to be installed).
@@ -62,10 +62,12 @@ TelegramDesktop = "Telegram"
 [general]
 seperator = ""
 ignore-char = "#"
+multiplier = "x"
 
 [options]
 no-names = true
 remove-duplicates = true
+number-duplicates = true
 ```
 
 For an overview of available options
@@ -82,6 +84,7 @@ FLAGS:
     -h, --help                 Prints help information
     -n, --no-names             Set to no to display only icons (if available)
     -r, --remove-duplicates    Remove duplicate entries in workspace
+    -d, --number-duplicates    Show duplicate entry count in workspace
     -V, --version              Prints version information
 
 OPTIONS:

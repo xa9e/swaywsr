@@ -19,6 +19,9 @@ struct Cli {
     /// Remove duplicate entries in workspace
     #[arg(short, long, default_value_t = false)]
     remove_duplicates: bool,
+    /// Show duplicate entry count in workspace
+    #[arg(short = 'd', long, default_value_t = false)]
+    number_duplicates: bool,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -48,6 +51,11 @@ fn main() -> anyhow::Result<()> {
         config
             .options
             .insert("remove-duplicates".to_string(), cli.remove_duplicates);
+    }
+    if cli.number_duplicates {
+        config
+            .options
+            .insert("number-duplicates".to_string(), cli.number_duplicates);
     }
 
     let subs = [EventType::Window, EventType::Workspace];
