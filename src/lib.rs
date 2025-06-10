@@ -159,7 +159,35 @@ pub fn update_tree(connection: &mut Connection, config: &Config) -> anyhow::Resu
 
         if !workspace_name.ends_with(char_ignore) {
             let classes = get_classes(&workspace, config);
-            let classes = if get_option(config, "remove-duplicates") || get_option(config, "remove_duplicates") {
+            let classes = if get_option(config, "number-duplicates")
+                || get_option(config, "number_duplicates")
+            {
+                let multiplier = config
+                    .general
+                    .get("multiplier")
+                    .map(String::as_str)
+                    .unwrap_or("x");
+                let mut counted: Vec<(String, usize)> = Vec::new();
+                for c in classes {
+                    if let Some((_, count)) = counted.iter_mut().find(|(name, _)| name == &c) {
+                        *count += 1;
+                    } else {
+                        counted.push((c, 1));
+                    }
+                }
+                counted
+                    .into_iter()
+                    .map(|(c, n)| {
+                        if n > 1 {
+                            format!("{}{}{}", c, multiplier, n)
+                        } else {
+                            c
+                        }
+                    })
+                    .collect()
+            } else if get_option(config, "remove-duplicates")
+                || get_option(config, "remove_duplicates")
+            {
                 classes.into_iter().unique().collect()
             } else {
                 classes
